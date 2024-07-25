@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:installed_apps/installed_apps.dart';
@@ -5,6 +6,8 @@ import 'package:installed_apps/app_info.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +40,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   List<String> pinnedApps = [];
+  Map<String, CachedAppInfo> cachedApps = {};
   Map<String, AppInfo> installedApps = {};
   bool isDragging = false;
   String searchQuery = "";
@@ -48,58 +52,71 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadPinnedApps();
+    _loadPinnedAppsAndCache();
     _loadInstalledAppsInBackground();
   }
 
-  Future<void> _loadPinnedApps() async {
+  Future<void> _loadPinnedAppsAndCache() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       setState(() {
         pinnedApps = prefs.getStringList('pinnedApps') ?? [];
+        final cachedAppsJson = prefs.getString('cachedApps');
+        if (cachedAppsJson != null) {
+          final decodedApps = jsonDecode(cachedAppsJson) as Map<String, dynamic>;
+          cachedApps = decodedApps.map((key, value) => MapEntry(key, CachedAppInfo.fromJson(value)));
+        }
       });
     } catch (e) {
-      debugPrint('Error loading pinned apps: $e');
+      debugPrint('Error loading pinned apps and cache: $e');
     }
   }
 
-  Future<void> _savePinnedApps() async {
+  Future<void> _savePinnedAppsAndCache() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setStringList('pinnedApps', pinnedApps);
+      final cachedAppsJson = jsonEncode(cachedApps.map((key, value) => MapEntry(key, value.toJson())));
+      await prefs.setString('cachedApps', cachedAppsJson);
     } catch (e) {
-      debugPrint('Error saving pinned apps: $e');
+      debugPrint('Error saving pinned apps and cache: $e');
     }
   }
 
   Future<void> _loadInstalledAppsInBackground() async {
-    // Simulate loading delay for demonstration purposes
-    // Remove this in your actual implementation
-
-
     try {
       final apps = await InstalledApps.getInstalledApps(true, true);
       if (mounted) {
         setState(() {
           installedApps = {for (var app in apps) app.packageName: app};
-          _isLoadingInstalledApps = false; // Update loading state
+          _updateCachedApps();
+          _isLoadingInstalledApps = false;
         });
       }
     } catch (e) {
       debugPrint('Error loading installed apps: $e');
       if (mounted) {
         setState(() {
-          _isLoadingInstalledApps = false; // Update loading state in case of error
+          _isLoadingInstalledApps = false;
         });
       }
     }
   }
 
+  void _updateCachedApps() {
+    for (final packageName in pinnedApps) {
+      if (installedApps.containsKey(packageName)) {
+        cachedApps[packageName] = CachedAppInfo.fromAppInfo(installedApps[packageName]!);
+      }
+    }
+    _savePinnedAppsAndCache();
+  }
+
   Future<void> _refresh() async {
     setState(() {
-      _isLoadingInstalledApps = true; // Show loading indicator while refreshing
+      _isLoadingInstalledApps = true;
     });
-    await _loadPinnedApps();
+    await _loadPinnedAppsAndCache();
     await _loadInstalledAppsInBackground();
   }
 
@@ -112,11 +129,11 @@ class HomeScreenState extends State<HomeScreen> {
         return AlertDialog(
           backgroundColor: Colors.black,
           title: const Text('Installed Apps',
-              style: TextStyle(color: Colors.grey, fontSize: 16),),
+              style: TextStyle(color: Colors.grey, fontSize: 16)),
           content: SizedBox(
             width: double.maxFinite,
             child: Builder(builder: (context) {
-              if (_isLoadingInstalledApps) { 
+              if (_isLoadingInstalledApps) {
                 return const Center(child: CircularProgressIndicator());
               } else {
                 final filteredApps = installedApps.values.where((app) =>
@@ -135,8 +152,9 @@ class HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           if (!pinnedApps.contains(app.packageName)) {
                             pinnedApps.add(app.packageName);
+                            cachedApps[app.packageName] = CachedAppInfo.fromAppInfo(app);
                             _sortPinnedApps();
-                            _savePinnedApps();
+                            _savePinnedAppsAndCache();
                           }
                         });
                         Navigator.of(context).pop();
@@ -190,8 +208,8 @@ class HomeScreenState extends State<HomeScreen> {
 
   void _sortPinnedApps() {
     pinnedApps.sort((a, b) {
-      final appA = installedApps[a];
-      final appB = installedApps[b];
+      final appA = cachedApps[a];
+      final appB = cachedApps[b];
 
       final nameA = appA?.name ?? '';
       final nameB = appB?.name ?? '';
@@ -216,7 +234,6 @@ class HomeScreenState extends State<HomeScreen> {
         onRefresh: _refresh,
         child: Column(
           children: [
-            // Search Bar
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: TextField(
@@ -250,57 +267,53 @@ class HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  // Display pinned apps or a loading indicator
-                  _isLoadingInstalledApps
-                      ? const Center(child: CircularProgressIndicator())
-                      : GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                            childAspectRatio: 1 / 1.2,
-                          ),
-                          itemCount: pinnedApps
-                              .where((packageName) {
-                                final app = installedApps[packageName];
-                                return app != null && app.name
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase());
-                              })
-                              .length,
-                          itemBuilder: (context, index) {
-                            final packageName = pinnedApps.where((packageName) {
-                              final app = installedApps[packageName];
-                              return app != null && app.name
-                                  .toLowerCase()
-                                  .contains(searchQuery.toLowerCase());
-                            }).toList()[index];
+                  GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      childAspectRatio: 1 / 1.2,
+                    ),
+                    itemCount: pinnedApps
+                        .where((packageName) {
+                          final app = cachedApps[packageName];
+                          return app != null && app.name
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase());
+                        })
+                        .length,
+                    itemBuilder: (context, index) {
+                      final packageName = pinnedApps.where((packageName) {
+                        final app = cachedApps[packageName];
+                        return app != null && app.name
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase());
+                      }).toList()[index];
 
-                            final app = installedApps[packageName];
+                      final app = cachedApps[packageName];
 
-                            if (app == null) {
-                              return const SizedBox
-                                  .shrink(); // App might be uninstalled
-                            }
+                      if (app == null) {
+                        return const SizedBox.shrink();
+                      }
 
-                            return Draggable<String>(
-                              data: packageName,
-                              feedback: Material(
-                                color: Colors.transparent,
-                                child: _buildAppIcon(app, dragging: true),
-                              ),
-                              childWhenDragging: const SizedBox.shrink(),
-                              onDragStarted: () =>
-                                  setState(() => isDragging = true),
-                              onDragEnd: (details) {
-                                setState(() => isDragging = false);
-                              },
-                              child: GestureDetector(
-                                onTap: () => launchApp(packageName),
-                                child: _buildAppIcon(app),
-                              ),
-                            );
-                          },
+                      return Draggable<String>(
+                        data: packageName,
+                        feedback: Material(
+                          color: Colors.transparent,
+                          child: _buildAppIcon(app, dragging: true),
                         ),
+                        childWhenDragging: const SizedBox.shrink(),
+                        onDragStarted: () =>
+                            setState(() => isDragging = true),
+                        onDragEnd: (details) {
+                          setState(() => isDragging = false);
+                        },
+                        child: GestureDetector(
+                          onTap: () => launchApp(packageName),
+                          child: _buildAppIcon(app),
+                        ),
+                      );
+                    },
+                  ),
                   if (isDragging)
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -309,8 +322,9 @@ class HomeScreenState extends State<HomeScreen> {
                         onAcceptWithDetails: (details) {
                           setState(() {
                             pinnedApps.remove(details.data);
+                            cachedApps.remove(details.data);
                             _sortPinnedApps();
-                            _savePinnedApps(); // Save changes
+                            _savePinnedAppsAndCache();
                             isDragging = false;
                           });
                         },
@@ -346,12 +360,12 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAppIcon(AppInfo app, {bool dragging = false}) {
+  Widget _buildAppIcon(CachedAppInfo app, {bool dragging = false}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         app.icon != null
-            ? Image.memory(app.icon!, width: 50, height: 50)
+            ? Image.memory(Uint8List.fromList(app.icon!), width: 50, height: 50)
             : const Icon(Icons.android, color: Colors.white, size: 50),
         const SizedBox(height: 5),
         Text(
@@ -365,5 +379,37 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+}
+
+class CachedAppInfo {
+  final String name;
+  final String packageName;
+  final List<int>? icon;
+
+  CachedAppInfo({required this.name, required this.packageName, this.icon});
+
+  factory CachedAppInfo.fromAppInfo(AppInfo appInfo) {
+    return CachedAppInfo(
+      name: appInfo.name,
+      packageName: appInfo.packageName,
+      icon: appInfo.icon != null ? Uint8List.fromList(appInfo.icon!).toList() : null,
+    );
+  }
+
+  factory CachedAppInfo.fromJson(Map<String, dynamic> json) {
+    return CachedAppInfo(
+      name: json['name'],
+      packageName: json['packageName'],
+      icon: json['icon'] != null ? List<int>.from(json['icon']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'packageName': packageName,
+      'icon': icon,
+    };
   }
 }
