@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The INTERNET permission is required for development. Specifically,
+         the Flutter tool needs it to communicate with the running application
+         to allow setting breakpoints, to provide hot reload, etc.
+    -->
+     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permission to read the external storage (if needed) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- Permission to write to the external storage (if needed) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Permission to query all packages installed on the device -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+     <!-- Permission to manage external storage -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+</manifest>
