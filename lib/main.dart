@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:installed_apps/installed_apps.dart';
@@ -8,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'settings_page.dart';  // Import the new settings page file
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +42,6 @@ class HomeScreenState extends State<HomeScreen> {
   List<String> pinnedApps = [];
   Map<String, CachedAppInfo> cachedApps = {};
   Map<String, AppInfo> installedApps = {};
-  bool isDragging = false;
   String searchQuery = "";
   bool _isLoadingInstalledApps = true;
 
@@ -148,17 +147,27 @@ class HomeScreenState extends State<HomeScreen> {
                           : const Icon(Icons.android, color: Colors.white),
                       title: Text(app.name,
                           style: const TextStyle(color: Colors.white)),
-                      onTap: () {
-                        setState(() {
-                          if (!pinnedApps.contains(app.packageName)) {
-                            pinnedApps.add(app.packageName);
-                            cachedApps[app.packageName] = CachedAppInfo.fromAppInfo(app);
-                            _sortPinnedApps();
+                      trailing: IconButton(
+                        icon: Icon(
+                          pinnedApps.contains(app.packageName)
+                              ? Icons.push_pin
+                              : Icons.push_pin_outlined,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (pinnedApps.contains(app.packageName)) {
+                              pinnedApps.remove(app.packageName);
+                              cachedApps.remove(app.packageName);
+                            } else {
+                              pinnedApps.add(app.packageName);
+                              cachedApps[app.packageName] = CachedAppInfo.fromAppInfo(app);
+                            }
                             _savePinnedAppsAndCache();
-                          }
-                        });
-                        Navigator.of(context).pop();
-                      },
+                          });
+                        },
+                      ),
+                      onTap: () => launchApp(app.packageName),
                     );
                   },
                 );
@@ -196,6 +205,7 @@ class HomeScreenState extends State<HomeScreen> {
             icon: CustomTabsCloseButtonIcons.back,
           ),
         ),
+        
       );
     } catch (e) {
       if (mounted) {
@@ -204,18 +214,6 @@ class HomeScreenState extends State<HomeScreen> {
         );
       }
     }
-  }
-
-  void _sortPinnedApps() {
-    pinnedApps.sort((a, b) {
-      final appA = cachedApps[a];
-      final appB = cachedApps[b];
-
-      final nameA = appA?.name ?? '';
-      final nameB = appB?.name ?? '';
-
-      return nameA.compareTo(nameB);
-    });
   }
 
   @override
@@ -229,6 +227,17 @@ class HomeScreenState extends State<HomeScreen> {
             color: Color.fromARGB(255, 226, 225, 225),
             fontSize: 20,
             fontWeight: FontWeight.bold),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notes),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refresh,
@@ -257,97 +266,50 @@ class HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(9999),
                     borderSide: BorderSide.none,
                   ),
+                  
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search, color: Colors.white),
                     onPressed: _searchGoogle,
+                    
                   ),
                 ),
               ),
             ),
             Expanded(
-              child: Stack(
-                children: [
-                  GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      childAspectRatio: 1 / 1.2,
-                    ),
-                    itemCount: pinnedApps
-                        .where((packageName) {
-                          final app = cachedApps[packageName];
-                          return app != null && app.name
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5,
+                  childAspectRatio: 1 / 1.2,
+                ),
+                itemCount: pinnedApps
+                    .where((packageName) {
+                      final app = cachedApps[packageName];
+                      return app != null &&
+                          app.name
                               .toLowerCase()
                               .contains(searchQuery.toLowerCase());
-                        })
-                        .length,
-                    itemBuilder: (context, index) {
-                      final packageName = pinnedApps.where((packageName) {
-                        final app = cachedApps[packageName];
-                        return app != null && app.name
+                    })
+                    .length,
+                itemBuilder: (context, index) {
+                  final packageName = pinnedApps.where((packageName) {
+                    final app = cachedApps[packageName];
+                    return app != null &&
+                        app.name
                             .toLowerCase()
                             .contains(searchQuery.toLowerCase());
-                      }).toList()[index];
+                  }).toList()[index];
 
-                      final app = cachedApps[packageName];
+                  final app = cachedApps[packageName];
 
-                      if (app == null) {
-                        return const SizedBox.shrink();
-                      }
+                  if (app == null) {
+                    return const SizedBox.shrink();
+                  }
 
-                      return Draggable<String>(
-                        data: packageName,
-                        feedback: Material(
-                          color: Colors.transparent,
-                          child: _buildAppIcon(app, dragging: true),
-                        ),
-                        childWhenDragging: const SizedBox.shrink(),
-                        onDragStarted: () =>
-                            setState(() => isDragging = true),
-                        onDragEnd: (details) {
-                          setState(() => isDragging = false);
-                        },
-                        child: GestureDetector(
-                          onTap: () => launchApp(packageName),
-                          child: _buildAppIcon(app),
-                        ),
-                      );
-                    },
-                  ),
-                  if (isDragging)
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: DragTarget<String>(
-                        onWillAcceptWithDetails: (details) => true,
-                        onAcceptWithDetails: (details) {
-                          setState(() {
-                            pinnedApps.remove(details.data);
-                            cachedApps.remove(details.data);
-                            _sortPinnedApps();
-                            _savePinnedAppsAndCache();
-                            isDragging = false;
-                          });
-                        },
-                        builder: (context, candidateData, rejectedData) {
-                          return Container(
-                            height: 100,
-                            color: candidateData.isEmpty
-                                ? Colors.black
-                                : Colors.red,
-                            child: Center(
-                              child: Icon(
-                                Icons.delete,
-                                color: candidateData.isEmpty
-                                    ? Colors.white
-                                    : Colors.black,
-                                size: 50,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                ],
+                  return GestureDetector(
+                    onTap: () => launchApp(packageName),
+                    child: _buildAppIcon(app, packageName),
+                  );
+                },
               ),
             ),
           ],
@@ -360,7 +322,7 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAppIcon(CachedAppInfo app, {bool dragging = false}) {
+  Widget _buildAppIcon(CachedAppInfo app, String packageName) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -370,13 +332,14 @@ class HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 5),
         Text(
           app.name,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: dragging ? 10 : 14,
+            fontSize: 14,
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.ellipsis,
         ),
+
       ],
     );
   }
