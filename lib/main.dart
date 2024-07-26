@@ -183,7 +183,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _searchGoogle() async {
-    final url = 'https://www.google.com/search?q=${Uri.encodeComponent(searchQuery)}';
+    final url = 'https://www.perplexity.ai/search?q=${Uri.encodeComponent(searchQuery)}';
     try {
       await launchUrl(
         Uri.parse(url),
