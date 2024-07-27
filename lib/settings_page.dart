@@ -98,23 +98,29 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _restoreFromBackup() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      final file = result.files.single;
-      final contents = utf8.decode(file.bytes!);
-      final jsonData = jsonDecode(contents) as Map<String, dynamic>;
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  if (result != null) {
+    final file = result.files.single;
+    final contents = utf8.decode(file.bytes!);
+    final jsonData = jsonDecode(contents) as Map<String, dynamic>;
 
-      final prefs = await SharedPreferences.getInstance();
-      for (var entry in jsonData.entries) {
-        if (entry.value is List) {
-          await prefs.setStringList(entry.key, List<String>.from(entry.value));
-        } else if (entry.value is String) {
-          await prefs.setString(entry.key, entry.value);
-        }
+    final prefs = await SharedPreferences.getInstance();
+    for (var entry in jsonData.entries) {
+      if (entry.value is List) {
+        await prefs.setStringList(entry.key, List<String>.from(entry.value));
+      } else if (entry.value is String) {
+        await prefs.setString(entry.key, entry.value);
       }
-      await _loadSavedData();
     }
+
+    // Update the UI by reloading the data and rebuilding the widget tree
+    setState(() {
+      _savedUrls.clear(); // Clear existing data
+      _savedNotes.clear();
+      _loadSavedData(); // Reload from SharedPreferences
+    });
   }
+}
 
   Future<void> _handleIncomingShare() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
