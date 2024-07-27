@@ -220,7 +220,7 @@ class HomeScreenState extends State<HomeScreen> {
     pinnedApps.sort((a, b) => cachedApps[a]?.name.toLowerCase().compareTo(
           cachedApps[b]?.name.toLowerCase() ?? "",
         ) ?? 0);
-        
+
     return Scaffold(
       key: _scaffoldMessengerKey,
       appBar: AppBar(
@@ -273,7 +273,6 @@ class HomeScreenState extends State<HomeScreen> {
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search, color: Colors.white),
                     onPressed: _searchGoogle,
-                    
                   ),
                 ),
               ),
@@ -284,9 +283,25 @@ class HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 5,
                   childAspectRatio: 1 / 1.2,
                 ),
-                itemCount: pinnedApps.length, // No need to filter here anymore
+                itemCount: pinnedApps
+                    .where((packageName) {
+                      final app = cachedApps[packageName];
+                      return app != null &&
+                          app.name
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase());
+                    })
+                    .length, // Filter based on searchQuery
                 itemBuilder: (context, index) {
-                  final packageName = pinnedApps[index]; // Directly access by index
+                  final packageName = pinnedApps
+                      .where((packageName) {
+                        final app = cachedApps[packageName];
+                        return app != null &&
+                            app.name
+                                .toLowerCase()
+                                .contains(searchQuery.toLowerCase());
+                      })
+                      .toList()[index]; // Filter based on searchQuery
                   final app = cachedApps[packageName];
 
                   if (app == null) {
