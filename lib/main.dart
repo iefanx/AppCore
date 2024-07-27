@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'settings_page.dart';  // Import the new settings page file
+import 'settings_page.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -216,6 +216,11 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Sort pinned apps alphabetically
+    pinnedApps.sort((a, b) => cachedApps[a]?.name.toLowerCase().compareTo(
+          cachedApps[b]?.name.toLowerCase() ?? "",
+        ) ?? 0);
+        
     return Scaffold(
       key: _scaffoldMessengerKey,
       appBar: AppBar(
@@ -279,24 +284,9 @@ class HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 5,
                   childAspectRatio: 1 / 1.2,
                 ),
-                itemCount: pinnedApps
-                    .where((packageName) {
-                      final app = cachedApps[packageName];
-                      return app != null &&
-                          app.name
-                              .toLowerCase()
-                              .contains(searchQuery.toLowerCase());
-                    })
-                    .length,
+                itemCount: pinnedApps.length, // No need to filter here anymore
                 itemBuilder: (context, index) {
-                  final packageName = pinnedApps.where((packageName) {
-                    final app = cachedApps[packageName];
-                    return app != null &&
-                        app.name
-                            .toLowerCase()
-                            .contains(searchQuery.toLowerCase());
-                  }).toList()[index];
-
+                  final packageName = pinnedApps[index]; // Directly access by index
                   final app = cachedApps[packageName];
 
                   if (app == null) {
@@ -337,7 +327,6 @@ class HomeScreenState extends State<HomeScreen> {
           textAlign: TextAlign.center,
           overflow: TextOverflow.ellipsis,
         ),
-
       ],
     );
   }

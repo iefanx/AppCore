@@ -149,6 +149,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_showUrls ? 'Saved URLs' : 'Saved Notes'),
+        titleTextStyle: const TextStyle(
+            color: Color.fromARGB(255, 226, 225, 225),
+            fontSize: 20,
+            fontWeight: FontWeight.bold),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -183,6 +187,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         onDismissed: (_) => _removeItem(index),
                         child: ListTile(
                           title: Text(item),
+                          
+                          titleTextStyle: const TextStyle(
+                            color: Color.fromARGB(255, 226, 225, 225),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
                           onTap: () {
                             if (_showUrls) {
                               _launchURL(item);
@@ -274,10 +283,13 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () => setState(() => _showUrls = true),
               style: TextButton.styleFrom(
                 backgroundColor: _showUrls ? Colors.white.withOpacity(0.2) : null,
+                textStyle: const TextStyle( fontWeight: FontWeight.bold, fontSize: 16),
               ),
               child: Text(
                 'URLs',
-                style: TextStyle(color: _showUrls ? Colors.white : Colors.white70),
+                style: TextStyle(color: _showUrls ? Colors.white : Colors.white70,
+                fontWeight: FontWeight.bold, fontSize: 16),
+                
               ),
             ),
           ),
@@ -286,10 +298,14 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () => setState(() => _showUrls = false),
               style: TextButton.styleFrom(
                 backgroundColor: !_showUrls ? Colors.white.withOpacity(0.2) : null,
+                textStyle: const TextStyle( fontWeight: FontWeight.bold, fontSize: 16),
               ),
+              
               child: Text(
                 'Notes',
-                style: TextStyle(color: !_showUrls ? Colors.white : Colors.white70),
+                style: TextStyle(color: !_showUrls ? Colors.white : Colors.white70,
+                fontWeight: FontWeight.bold, fontSize: 16),
+                
               ),
             ),
           ),
