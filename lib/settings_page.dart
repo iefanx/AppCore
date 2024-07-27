@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as ctb;
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -18,17 +20,15 @@ class _SettingsPageState extends State<SettingsPage> {
   final List<String> _savedNotes = [];
   bool _showUrls = true;
 
-  // Use a more descriptive name for clarity.
   final TextEditingController _newItemController = TextEditingController();
-
-  // Use late initialization for controllers to improve readability.
   late _ItemSearchDelegate _searchDelegate;
 
   @override
   void initState() {
     super.initState();
     _loadSavedData();
-    _searchDelegate = _ItemSearchDelegate(_getCurrentItems); 
+    _searchDelegate = _ItemSearchDelegate(_getCurrentItems);
+    _handleIncomingShare();
   }
 
   @override
@@ -37,13 +37,12 @@ class _SettingsPageState extends State<SettingsPage> {
     super.dispose();
   }
 
-  // Separate data loading and state updates for better structure.
   Future<void> _loadSavedData() async {
     final prefs = await SharedPreferences.getInstance();
     final loadedUrls = prefs.getStringList('savedUrls') ?? [];
     final loadedNotes = prefs.getStringList('savedNotes') ?? [];
     setState(() {
-      _savedUrls.addAll(loadedUrls); 
+      _savedUrls.addAll(loadedUrls);
       _savedNotes.addAll(loadedNotes);
     });
   }
@@ -66,8 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
       }
       _saveData();
     });
-    // Update search delegate's data source
-    _searchDelegate.updateItems(_getCurrentItems); 
+    _searchDelegate.updateItems(_getCurrentItems);
   }
 
   void _removeItem(int index) {
@@ -79,8 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
       }
       _saveData();
     });
-    // Update search delegate's data source
-    _searchDelegate.updateItems(_getCurrentItems); 
+    _searchDelegate.updateItems(_getCurrentItems);
   }
 
   Future<void> _downloadBackup() async {
@@ -89,7 +86,15 @@ class _SettingsPageState extends State<SettingsPage> {
       return map..addAll({key: prefs.get(key)});
     });
     final jsonString = jsonEncode(allData);
-    await Share.share(jsonString, subject: 'App Data Backup');
+    
+    final directory = await getExternalStorageDirectory();
+    final path = directory?.path ?? '';
+    final filePath = '$path/backup.json';
+    final file = File(filePath);
+    
+    await file.writeAsString(jsonString);
+    
+    await Share.shareXFiles([XFile(filePath)], text: 'App Data Backup');
   }
 
   Future<void> _restoreFromBackup() async {
@@ -111,8 +116,27 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  // Use a getter for better readability and to avoid typos
-  List<String> get _getCurrentItems => _showUrls ? _savedUrls : _savedNotes; 
+  Future<void> _handleIncomingShare() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final initialText = prefs.getString('shared_text');
+    final initialUrl = prefs.getString('shared_url');
+
+    if (initialText != null) {
+      setState(() {
+        _savedNotes.add(initialText);
+        prefs.remove('shared_text');
+      });
+    }
+
+    if (initialUrl != null) {
+      setState(() {
+        _savedUrls.add(initialUrl);
+        prefs.remove('shared_url');
+      });
+    }
+  }
+
+  List<String> get _getCurrentItems => _showUrls ? _savedUrls : _savedNotes;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: _searchDelegate, 
+                delegate: _searchDelegate,
               );
             },
           ),
@@ -138,32 +162,32 @@ class _SettingsPageState extends State<SettingsPage> {
             child: _getCurrentItems.isEmpty
                 ? const Center(child: Text('No items found'))
                 : ListView.builder(
-              itemCount: _getCurrentItems.length,
-              itemBuilder: (context, index) {
-                final item = _getCurrentItems[index];
-                return Dismissible(
-                  key: Key(item),
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20),
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (_) => _removeItem(index),
-                  child: ListTile(
-                    title: Text(item),
-                    onTap: () {
-                      if (_showUrls) {
-                        _launchURL(item);
-                      } else {
-                        // Handle note tap 
-                      }
+                    itemCount: _getCurrentItems.length,
+                    itemBuilder: (context, index) {
+                      final item = _getCurrentItems[index];
+                      return Dismissible(
+                        key: Key(item),
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (_) => _removeItem(index),
+                        child: ListTile(
+                          title: Text(item),
+                          onTap: () {
+                            if (_showUrls) {
+                              _launchURL(item);
+                            } else {
+                              // Handle note tap
+                            }
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -197,10 +221,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _launchURL(String url) async {
     try {
-      await ctb.launchUrl(
+      await launchUrl(
         Uri.parse(url),
-        customTabsOptions: const ctb.CustomTabsOptions(
-          shareState: ctb.CustomTabsShareState.on,
+        customTabsOptions: const CustomTabsOptions(
+          
+          shareState: CustomTabsShareState.on,
           urlBarHidingEnabled: true,
           showTitle: true,
           
@@ -274,7 +299,7 @@ class _SettingsPageState extends State<SettingsPage> {
         return AlertDialog(
           title: Text('Add ${_showUrls ? 'URL' : 'Note'}'),
           content: TextField(
-            controller: _newItemController, // Use the correct controller
+            controller: _newItemController,
             decoration: InputDecoration(
               hintText: 'Enter ${_showUrls ? 'URL' : 'Note'}',
             ),
@@ -286,9 +311,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (_newItemController.text.isNotEmpty) { // Use the correct controller
-                  _addItem(_newItemController.text);     // Use the correct controller
-                  _newItemController.clear();              // Use the correct controller
+                if (_newItemController.text.isNotEmpty) {
+                  _addItem(_newItemController.text);
+                  _newItemController.clear();
                   Navigator.pop(context);
                 }
               },
@@ -301,17 +326,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-// Update _ItemSearchDelegate to work with a data source
 class _ItemSearchDelegate extends SearchDelegate<String> {
   List<String> _items;
 
   _ItemSearchDelegate(this._items);
 
-  // Add a method to update the data source
   void updateItems(List<String> newItems) {
     _items = newItems;
-    // Rebuild the search results
-    
   }
 
   @override

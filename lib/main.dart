@@ -201,9 +201,7 @@ class HomeScreenState extends State<HomeScreen> {
           shareState: CustomTabsShareState.on,
           urlBarHidingEnabled: true,
           showTitle: true,
-          closeButton: CustomTabsCloseButton(
-            icon: CustomTabsCloseButtonIcons.back,
-          ),
+          
         ),
         
       );
