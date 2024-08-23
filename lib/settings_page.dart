@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
@@ -54,47 +55,58 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _addItem(String item) {
-    if (_showUrls && !item.startsWith('https://')) {
-      item = 'https://$item';
+  if (_showUrls && !item.startsWith('https://')) {
+    item = 'https://$item';
+  }
+  setState(() {
+    if (_showUrls) {
+      _savedUrls.add(item);
+    } else {
+      _savedNotes.add(item);
     }
-    setState(() {
-      if (_showUrls) {
-        _savedUrls.add(item);
-      } else {
-        _savedNotes.add(item);
-      }
-      _saveData();
-    });
-    _searchDelegate.updateItems(_getCurrentItems);
-  }
+    _saveData();
+  });
+  _searchDelegate.updateItems(_getCurrentItems); // Update search delegate
+}
 
-  void _removeItem(int index) {
-    setState(() {
-      if (_showUrls) {
-        _savedUrls.removeAt(index);
-      } else {
-        _savedNotes.removeAt(index);
-      }
-      _saveData();
-    });
-    _searchDelegate.updateItems(_getCurrentItems);
-  }
+void _removeItem(int index) {
+  setState(() {
+    if (_showUrls) {
+      _savedUrls.removeAt(index);
+    } else {
+      _savedNotes.removeAt(index);
+    }
+    _saveData();
+  });
+  _searchDelegate.updateItems(_getCurrentItems); // Update search delegate
+}
 
   Future<void> _downloadBackup() async {
-    final prefs = await SharedPreferences.getInstance();
-    final allData = prefs.getKeys().fold<Map<String, dynamic>>({}, (map, key) {
-      return map..addAll({key: prefs.get(key)});
-    });
-    final jsonString = jsonEncode(allData);
-    
-    final directory = await getExternalStorageDirectory();
-    final path = directory?.path ?? '';
-    final filePath = '$path/backup.json';
-    final file = File(filePath);
-    
-    await file.writeAsString(jsonString);
-    
-    await Share.shareXFiles([XFile(filePath)], text: 'App Data Backup');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final allData = prefs.getKeys().fold<Map<String, dynamic>>({}, (map, key) {
+        return map..addAll({key: prefs.get(key)});
+      });
+      final jsonString = jsonEncode(allData);
+
+      final directory = await getExternalStorageDirectory();
+      final path = directory?.path ?? '';
+      final filePath = '$path/backup.json';
+      final file = File(filePath);
+
+      await file.writeAsString(jsonString);
+
+      await Share.shareXFiles([XFile(filePath)], text: 'App Data Backup');
+
+      // Show success message
+      Fluttertoast.showToast(msg: 'Backup successful!');
+    } catch (e) {
+      // Show error message
+      Fluttertoast.showToast(msg: 'Backup failed: ${e.toString()}');
+      if (kDebugMode) {
+        print('Error during backup: $e');
+      }
+    }
   }
 
   Future<void> _restoreFromBackup() async {
@@ -142,6 +154,30 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  String extractNameFromUrl(String url) {
+  // Remove the scheme (http://, https://)
+  String name = url.replaceFirst(RegExp(r'https?://'), '');
+
+  // Remove 'www.' if present
+  name = name.replaceFirst(RegExp(r'www\.'), '');
+
+  // Remove common domain suffixes (.com, .in, etc.)
+  name = name.split(RegExp(r'(\.com|\.in|\.org|\.net|/)', caseSensitive: false))[0];
+
+  // Capitalize the first letter for better formatting
+  name = name[0].toUpperCase() + name.substring(1);
+
+  return name;
+}
+
+bool isUrl(String item) {
+  const urlPattern = r'^https?:\/\/'; // Basic URL pattern
+  final result = RegExp(urlPattern).hasMatch(item);
+  return result;
+}
+
+
+
   List<String> get _getCurrentItems => _showUrls ? _savedUrls : _savedNotes;
 
   @override
@@ -166,46 +202,74 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
       body: Column(
-        children: [
-          _buildToggleBar(),
-          Expanded(
-            child: _getCurrentItems.isEmpty
-                ? const Center(child: Text('No items found'))
-                : ListView.builder(
-                    itemCount: _getCurrentItems.length,
-                    itemBuilder: (context, index) {
-                      final item = _getCurrentItems[index];
-                      return Dismissible(
-                        key: Key(item),
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          child: const Icon(Icons.delete, color: Colors.white),
-                        ),
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (_) => _removeItem(index),
-                        child: ListTile(
-                          title: Text(item),
-                          
-                          titleTextStyle: const TextStyle(
-                            color: Color.fromARGB(255, 226, 225, 225),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                          onTap: () {
-                            if (_showUrls) {
-                              _launchURL(item);
-                            } else {
-                              // Handle note tap
-                            }
-                          },
-                        ),
-                      );
+  children: [
+    _buildToggleBar(),
+    Expanded(
+      child: _getCurrentItems.isEmpty
+          ? const Center(child: Text('No items found'))
+          : ListView.builder(
+              itemCount: _getCurrentItems.length,
+              itemBuilder: (context, index) {
+                final item = _getCurrentItems[index];
+                return Dismissible(
+                  key: Key(item),
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (_) => _removeItem(index),
+                  child: ListTile(
+                    title: isUrl(item)
+                        ? RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "${extractNameFromUrl(item)}: ",
+                                  style: const TextStyle(
+                                    color: Colors.blueAccent,  // Color for the name
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: item,
+                                  style: const TextStyle(
+                                    color: Colors.grey,  // Color for the URL
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SelectableText(
+                            item,
+                            style: const TextStyle(
+                              color: Colors.white,  // Default text color for non-URLs
+                              fontSize: 20,
+                            ),
+                            onTap: () {
+                              // Handle note tap or other interaction
+                            },
+
+                          ),
+                    onTap: () {
+                      if (_showUrls) {
+                        _launchURL(item);
+                      } else {
+                        // Handle note tap
+                      }
                     },
                   ),
-          ),
-        ],
-      ),
+                );
+              },
+            ),
+    ),
+  ],
+),
+
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddItemDialog,
         child: const Icon(Icons.add, color: Colors.black),
@@ -273,39 +337,46 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildToggleBar() {
+    Widget _buildToggleBar() {
     return Container(
       color: Theme.of(context).primaryColor,
       child: Row(
         children: [
           Expanded(
             child: TextButton(
-              onPressed: () => setState(() => _showUrls = true),
+              onPressed: () {
+                setState(() {
+                  _showUrls = true;
+                  _searchDelegate.updateItems(_getCurrentItems); // Update search delegate
+                });
+              },
               style: TextButton.styleFrom(
                 backgroundColor: _showUrls ? Colors.white.withOpacity(0.2) : null,
-                textStyle: const TextStyle( fontWeight: FontWeight.bold, fontSize: 16),
+                textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               child: Text(
                 'URLs',
                 style: TextStyle(color: _showUrls ? Colors.white : Colors.white70,
                 fontWeight: FontWeight.bold, fontSize: 16),
-                
               ),
             ),
           ),
           Expanded(
             child: TextButton(
-              onPressed: () => setState(() => _showUrls = false),
+              onPressed: () {
+                setState(() {
+                  _showUrls = false;
+                  _searchDelegate.updateItems(_getCurrentItems); // Update search delegate
+                });
+              },
               style: TextButton.styleFrom(
                 backgroundColor: !_showUrls ? Colors.white.withOpacity(0.2) : null,
-                textStyle: const TextStyle( fontWeight: FontWeight.bold, fontSize: 16),
+                textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              
               child: Text(
                 'Notes',
                 style: TextStyle(color: !_showUrls ? Colors.white : Colors.white70,
                 fontWeight: FontWeight.bold, fontSize: 16),
-                
               ),
             ),
           ),
@@ -407,3 +478,4 @@ class _ItemSearchDelegate extends SearchDelegate<String> {
     );
   }
 }
+
