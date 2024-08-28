@@ -17,8 +17,8 @@ Declutter your home screen by storing all your frequently used apps, PWAs, and w
 * **Native App Launcher:** Your personal app launcher. Store, organize, and access your favorite native apps with lightning-fast speed and ease.
 * **URL & Text Store:** Quickly store & access frequent websites and securely store important text with advanced local encryption.
 * **Built-in Browser:** Browse web with lightning-fast native custom tabs, supports multitasking with floating windows, and trustless extension/account sync with your default browser.
-* **Local, Web & AI Search:** Instantly find your saved apps, links, and notes. Support platform specific and Al-powered searches using [DDG bangs](https://duckduckgo.com/bangs)  eg !r for Reddit,!yt for YouTube,!chat for Ai Assistant and [more](https://duckduckgo.com/bangs)
-
+* **Unified Search:** Quickly access your saved apps, links, and notes. Search across platforms and leverage the power of Al with DDG [bangs](https://duckduckgo.com/bangs) (like "!r" for Reddit, "!yt" for YouTube, "!chat" for Al Assistant) and [more](https://duckduckgo.com/bangs)
+  
 **Other Stuff:**
 
 * Lightning-fast
