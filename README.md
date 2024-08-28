@@ -12,7 +12,7 @@ Designed for **Cyberpunks**
 
 **Key Features:**
 
-* **Native App Launcher:** Organize and seamlessly launch or multitask between native apps and websites.
+* **Native App Launcher:** Organize and seamlessly launch or multitask between you favorite native apps and websites.
 * **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
 * **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
 * **Other features:** Lightning-fast, private, and offline-first, with no gatekeeping, no trackers, and Nostr integration (in progress). Expect rapid upgrades, too.
