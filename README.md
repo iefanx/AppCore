@@ -13,7 +13,7 @@
 
 **Key Features:**
 
-* **Native App Launcher:** Organize and seamlessly launch or multitask between you favorite native apps and websites.
+* **Native App Launcher:** Store, organize, and launch your favorite apps and websites seamlessly. Easily switch between them and multitask effortlessly.
 * **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
 * **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser. 
 * **Super Search:** Quickly find anything in AppCore, including pinned/installed apps, URLs, notes, and even web searches. Use AI queries and DDG bangs for more complex or platform-specific searches.
