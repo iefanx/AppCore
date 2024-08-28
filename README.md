@@ -1,4 +1,4 @@
-### AppCore: App for Power Users & Cyberpunks! 
+### AppCore: Designed for Power Users & Cyberpunks! 
 
 ##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
