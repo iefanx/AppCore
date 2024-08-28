@@ -1,4 +1,4 @@
-### AppCore: Build For Power Users! 
+### AppCore: Power User's App! 
 
 #### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
