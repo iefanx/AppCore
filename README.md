@@ -1,18 +1,12 @@
-### AppCore: Designed for Power Users & Cyberpunks! 
-
-#### 
-
-
-
-![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
-
-## AppCore: Super App Designed for Power Users & Cyberpunks!
+### AppCore: Super App Designed for Power Users & Cyberpunks!
 
 **Store, Organize & Run your frequently used native Apps & Websites with AppCore.**
 
 *(No trackers, No gatekeeping, Offline-first, Privacy-focused, Extremely fast & Open sourced)*
 
 **Install Now: [AppCore APK]**(https://github.com/iefanx/AppCore/releases)
+
+![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
 
 ### AppCore Use Cases & Features:
 
