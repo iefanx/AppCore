@@ -5,7 +5,7 @@
 #### *AppCore use cases & features:* 
 **AppCore:** **Organize** your favorite **Apps**, **Websites**, and **Notes** in **One Super App**
 
-**Clean your home screen** by **keep** all your frequently used **App & Website** in a single **AppCore** for **easy access.**  **without compromising** your **Privacy**, **Security**, **Functionalities** or **Performance**. 
+**Clean your home screen** by **keep** all your frequently used **App & Website** in a **AppCore** for **easy access** **without compromising** your **Privacy**, **Security**, **Functionalities** or **Performance**. 
 
 *Designed for **Cyberpunks***
 
