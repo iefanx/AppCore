@@ -5,6 +5,8 @@
 **Consolidate** your essential **apps**, **websites**, and **notes** into one **app**, keeping your **home screen** **clean** by **replacing** all those **apps** with just **AppCore** without **compromising** your **Privacy**, **Security** or **Performance**. 
 Designed for **Cyberpunks**
 
+![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
+
 **Key Features:**
 
 * **Native App Launcher:** Organize and seamlessly launch or multitask between native apps and websites.
