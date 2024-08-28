@@ -4,6 +4,7 @@
 
 #### *AppCore use cases & features:*
 **Organize** your favorite **apps**, **websites**, and **notes** into one **app**. 
+
 **Clean your home screen**  by **replacing** all **App Shortcuts** with **One AppCore App** without **compromising** your **Privacy**, **Security**, **Functionalities** or **Performance**. 
 
 *Designed for **Cyberpunks***
