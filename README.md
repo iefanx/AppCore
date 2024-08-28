@@ -1,6 +1,6 @@
-### AppCore: Power User's App! 
+#### AppCore: App for Power User! 
 
-#### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
+##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
 #### *AppCore use cases & features:*
 **Organize** your favorite **Apps**, **Websites**, and **Notes** in one **super app**. 
