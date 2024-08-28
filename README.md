@@ -1,28 +1,49 @@
 ### AppCore: Designed for Power Users & Cyberpunks! 
 
-#### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
+#### 
 
-#### *AppCore use cases & features:* 
-**AppCore:** **Organize** your favorite **Apps**, **Websites**, and **Notes** in **One Super App.**
 
-**Declutter** your home screen by keeping all your frequently used **Apps**, **PWAs** & **Websites** in **AppCore** for easy access—without compromising your **Privacy**, **Security**, **Functionality** or **Performance**.
 
 ![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
 
+## AppCore: Super App Designed for Power Users & Cyberpunks!
+
+**Store, Organize & Run your frequently used native Apps & Websites with AppCore.**
+
+*(No trackers, No gatekeeping, Offline-first, Privacy-focused, Extremely fast & Open sourced)*
+
+**Install Now: [AppCore APK]**(https://github.com/iefanx/AppCore/releases)
+
+### AppCore Use Cases & Features:
+
+Declutter your home screen by storing all your frequently used apps, PWAs, and websites in one AppCore app for easy access—without compromising your privacy, security, functionality, or performance.
+
 **Key Features:**
 
-* **Native App Launcher:** Store, organize, and launch your favorite apps and websites seamlessly. Easily switch between them and multitask effortlessly.
-* **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
-* **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser. 
-* **Super Search:** Quickly find anything in AppCore, including pinned/installed apps, URLs, notes, and even web searches. Use AI queries and DDG bangs for more complex or platform-specific searches.
-* **Other Stuff:** Lightning-fast, private, and offline-first, with no gatekeeping, no trackers, and Nostr integration (in progress).
-  
-**For Early Testers:** Thank you for your ongoing feedback and suggestions. I firmly believe in user-driven development. Please don't hesitate to propose features that would enhance AppCore's usefulness for you.
+* **Native App Launcher:** Store, organize, and launch your favorite apps and websites seamlessly. Switch between them and multitask effortlessly.
+* **URL & Text Store:** Quickly access frequent websites and securely store important text with advanced local encryption.
+* **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
+* **Super Search:** Find anything in AppCore instantly—pinned/installed apps, URLs, notes, and even web searches. Use AI queries and DuckDuckGo bangs for complex or platform-specific searches.
 
-**Last but not least:** I highly recommend keeping AppCore in Obtainium, as it will continue to improve. Within the next 20 days, I aim to make it one of the best in its category before uploading it to the Play Store.
+**Other Stuff:**
 
-***Notice:** This project is currently in its initial phases, and you can anticipate frequent enhancements in the upcoming days and weeks.*
+* Lightning-fast
+* Privacy-focused
+* Offline-first
+* No gatekeeping
+* No trackers
+* Nostr integration (in progress)
+* Encryptions etc
 
+**For Early Testers:**
+
+Thanks for your ongoing feedback and suggestions. I'm all about user-driven development. Got ideas to make AppCore even better for you? Bring 'em on!
+
+**What's Next:**
+
+Keep AppCore in Obtainium—it's only getting better. My goal? Make it a category leader within 20 days before hitting the Play Store. Expect frequent upgrades in the coming days and weeks.
+
+ 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
