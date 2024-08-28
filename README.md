@@ -1,13 +1,10 @@
-### AppCore: App for Power Users! 
+#### AppCore: App for Power Users & Cyberpunks! 
 
 ##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
-#### *AppCore use cases & features:* 
+##### *AppCore use cases & features:* 
 **AppCore:** **Organize** your favorite **Apps**, **Websites**, and **Notes** in **One Super App.**
-
-**Clean your home screen** by **keep** all your frequently used **App, PWAs & Website** in a **AppCore** for **easy access** **without compromising** your **Privacy**, **Security**, **Functionalities** or **Performance**. 
-
-*Designed for **Cyberpunks***
+**Declutter** your home screen by keeping all your frequently used **Apps**, **PWAs** & **Websites** in **AppCore** for easy access—without compromising your **Privacy**, **Security**, **Functionality** or **Performance**.
 
 ![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
 
