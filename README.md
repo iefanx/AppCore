@@ -29,6 +29,7 @@ AppCore is designed to empower users with complete control over their digital ex
  * No Gatekeeping
  * No Tracker
  * Ad-Free
+
 In essence, AppCore is a platform built on trust, privacy, and user empowerment.
 
 **For Early Testers:**
