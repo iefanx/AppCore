@@ -1,4 +1,4 @@
-#### AppCore: Everything App! 
+### AppCore: Everything App! 
 
 #### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
