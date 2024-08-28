@@ -3,7 +3,7 @@
 #### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
 #### *AppCore use cases & features:*
-**Consolidate** your essential **apps**, **websites**, and **notes** into one **app**, keeping your **home screen** **clean** by **replacing** all those **apps** with just **AppCore** without **compromising** your **Privacy**, **Security** or **Performance**. 
+**Consolidate** your essential **apps**, **websites**, and **notes** into one **app**, keeping your **home screen** **clean** by **replacing** them with **AppCore** without **compromising** your **Privacy**, **Security** or **Performance**. 
 Designed for **Cyberpunks**
 
 ![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
