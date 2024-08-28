@@ -15,7 +15,7 @@ Declutter your home screen by storing all your frequently used apps, PWAs, and w
 **Key Features:**
 
 * **Native App Launcher:** Your personal app launcher. Store, organize, and access your favorite native apps with lightning-fast speed and ease.
-* **URL & Text Store:** Quickly access frequent websites and securely store important text with advanced local encryption.
+* **URL & Text Store:** Quickly store & access frequent websites and securely store important text with advanced local encryption.
 * **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
 * **Super Search:** Find anything in AppCore instantly—pinned/installed apps, URLs, notes, and even web searches. Use AI queries and DuckDuckGo bangs for complex or platform-specific searches.
 
