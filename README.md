@@ -1,6 +1,17 @@
-# myapp
+**AppCore**
 
-A new Flutter project.
+*Consolidate your essential apps, websites, and notes into one app, keeping your home screen clean by replacing all those apps with just one.*
+
+**Key Features:**
+
+* **Native App Launcher:** Organize and seamlessly launch or multitask between native apps and websites.
+* **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
+* **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
+* **Other features:** Lightning-fast, private, and offline-first, with no gatekeeping, no trackers, and Nostr integration (in progress). Expect rapid upgrades, too.
+
+**For Early Testers:** Thank you for your ongoing feedback and suggestions. I firmly believe in user-driven development. Please don't hesitate to propose features that would enhance AppCore's usefulness for you.
+
+**Last but not least:** I highly recommend keeping AppCore in Obtainium, as it will continue to improve. Within the next 20 days, I aim to make it one of the best in its category before uploading it to the Play Store.
 
 ## Getting Started
 
