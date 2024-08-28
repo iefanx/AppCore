@@ -12,10 +12,10 @@ Designed for **Cyberpunks**
 
 **Key Features:**
 
-* **Native App Launcher:** Organize and seamlessly launch or multitask between you favorite native apps and websites.
-* **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
-* **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
-* **Other features:** Lightning-fast, private, and offline-first, with no gatekeeping, no trackers, and Nostr integration (in progress). Expect rapid upgrades, too.
+1. **Native App Launcher:** Organize and seamlessly launch or multitask between you favorite native apps and websites.
+2. **URL & Text Store:** Quickly access frequently used websites and securely store important text with advanced local encryption.
+3. **Built-in Browser:** Enjoy native custom tabs, lightning-fast performance, multitasking with floating windows, and trustless extension/account sync with your default browser.
+4. **Other features:** Lightning-fast, private, and offline-first, with no gatekeeping, no trackers, and Nostr integration (in progress). Expect rapid upgrades, too.
 
 **For Early Testers:** Thank you for your ongoing feedback and suggestions. I firmly believe in user-driven development. Please don't hesitate to propose features that would enhance AppCore's usefulness for you.
 
