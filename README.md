@@ -6,7 +6,7 @@
 **Organize** your favorite **apps**, **websites**, and **notes** into one **app**. 
 **Clean your home screen**  by **replacing** all **App Shortcuts** with **One AppCore App** without **compromising** your **Privacy**, **Security**, **Functionalities** or **Performance**. 
 
-Designed for **Cyberpunks**
+*Designed for **Cyberpunks***
 
 ![FunPic_20240824_095020769](https://github.com/user-attachments/assets/ef5cb24c-d0b4-46f3-bdd3-11603f3b20fc)
 
