@@ -2,7 +2,7 @@
 
 ##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
-*Consolidate your essential apps, websites, and notes into one app, keeping your home screen clean by replacing all those apps with just one.*
+***Consolidate your essential apps, websites, and notes into one app, keeping your home screen clean by replacing all those apps with just one.***
 
 **Key Features:**
 
