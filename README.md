@@ -1,4 +1,4 @@
-### AppCore*
+### AppCore: Organize Apps, URL & Notes
 
 #### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
