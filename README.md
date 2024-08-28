@@ -1,6 +1,6 @@
 ### AppCore: Designed for Power Users & Cyberpunks! 
 
-##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
+#### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
 #### *AppCore use cases & features:* 
 **AppCore:** **Organize** your favorite **Apps**, **Websites**, and **Notes** in **One Super App.**
