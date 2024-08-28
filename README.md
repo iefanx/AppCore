@@ -2,7 +2,7 @@
 
 ##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
-##### *AppCore use cases & features:* 
+#### *AppCore use cases & features:* 
 **AppCore:** **Organize** your favorite **Apps**, **Websites**, and **Notes** in **One Super App.**
 
 **Declutter** your home screen by keeping all your frequently used **Apps**, **PWAs** & **Websites** in **AppCore** for easy access—without compromising your **Privacy**, **Security**, **Functionality** or **Performance**.
