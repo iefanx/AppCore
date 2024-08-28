@@ -1,6 +1,6 @@
-#### AppCore: Organize all your important Apps, URLs & Notes in one App.
+#### AppCore: Everything App! 
 
-##### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
+#### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
 **Consolidate** your essential **apps**, **websites**, and **notes** into one **app**, keeping your **home screen** **clean** by **replacing** all those **apps** with just one without **compromising** your **Privacy**, **Security** or **Performance**. 
 Designed for **Cyberpunks**
