@@ -19,15 +19,17 @@ Declutter your home screen by storing all your frequently used apps, PWAs, and w
 * **Built-in Browser:** Browse web with lightning-fast native custom tabs, supports multitasking with floating windows, and trustless extension/account sync with your default browser.
 * **Unified Search:** Quickly access your saved apps, links, and notes. Search across platforms and leverage the power of Al with DDG [bangs](https://duckduckgo.com/bangs) (like "!r" for Reddit, "!yt" for YouTube, "!chat" for Al Assistant) and [more](https://duckduckgo.com/bangs)
   
-**Other Stuff:**
-
-* Lightning-fast
-* Privacy-focused
-* Offline-first
-* No gatekeeping
-* No trackers
-* Nostr integration (in progress)
-* Encryptions etc
+**AppCore Core Principles:**
+AppCore is designed to empower users with complete control over their digital experience. We prioritize privacy, security, and performance to create a transparent, ad-free platform that operates without gatekeeping or tracking.
+**Key Principles:**
+ * User-Driven
+ * Performance-Oriented
+ * Offline-First
+ * Transparent
+ * No Gatekeeping
+ * No Tracker
+ * Ad-Free
+In essence, AppCore is a platform built on trust, privacy, and user empowerment.
 
 **For Early Testers:**
 
