@@ -1,4 +1,4 @@
-### AppCore: Everything App! 
+### AppCore: App For Power Users! 
 
 #### [Download AppCore APK](https://github.com/iefanx/AppCore/releases)
 
